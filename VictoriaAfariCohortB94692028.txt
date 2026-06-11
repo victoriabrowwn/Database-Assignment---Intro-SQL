@@ -1,0 +1,674 @@
+Question 1
+MariaDB [movieco]> create table MEMBERSHIP(MEM_NUM VARCHAR(50) Primary Key, MEM_FNAME VARCHAR(50), MEM_LNAME VARCHAR(50), MEM_STREET VARCHAR(50), MEM_CITY VARCHAR(50), MEM_STATE VARCHAR(50), MEM_BALANCE int);
+Query OK, 0 rows affected (0.038 sec)
+
+MariaDB [movieco]> describe MEMBERSHIP;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| MEM_NUM     | varchar(50) | NO   | PRI | NULL    |       |
+| MEM_FNAME   | varchar(50) | YES  |     | NULL    |       |
+| MEM_LNAME   | varchar(50) | YES  |     | NULL    |       |
+| MEM_STREET  | varchar(50) | YES  |     | NULL    |       |
+| MEM_CITY    | varchar(50) | YES  |     | NULL    |       |
+| MEM_STATE   | varchar(50) | YES  |     | NULL    |       |
+| MEM_BALANCE | int(11)     | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+7 rows in set (0.050 sec)
+
+MariaDB [movieco]> alter table MEMBERSHIP modify column MEM_BALANCE double;
+Query OK, 0 rows affected (0.085 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [movieco]> describe MEMBERSHIP;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| MEM_NUM     | varchar(50) | NO   | PRI | NULL    |       |
+| MEM_FNAME   | varchar(50) | YES  |     | NULL    |       |
+| MEM_LNAME   | varchar(50) | YES  |     | NULL    |       |
+| MEM_STREET  | varchar(50) | YES  |     | NULL    |       |
+| MEM_CITY    | varchar(50) | YES  |     | NULL    |       |
+| MEM_STATE   | varchar(50) | YES  |     | NULL    |       |
+| MEM_BALANCE | double      | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+7 rows in set (0.053 sec)
+
+MariaDB [movieco]> describe MEMBERSHIP;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| MEM_NUM     | varchar(50) | NO   | PRI | NULL    |       |
+| MEM_FNAME   | varchar(50) | YES  |     | NULL    |       |
+| MEM_LNAME   | varchar(50) | YES  |     | NULL    |       |
+| MEM_STREET  | varchar(50) | YES  |     | NULL    |       |
+| MEM_CITY    | varchar(50) | YES  |     | NULL    |       |
+| MEM_STATE   | varchar(50) | YES  |     | NULL    |       |
+| MEM_ZIP     | varchar(50) | YES  |     | NULL    |       |
+| MEM_BALANCE | double      | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+8 rows in set (0.030 sec)
+
+MariaDB [movieco]> create table RENTAL(RENT_NUM VARCHAR(50) Primary Key, RENT_DATE VARCHAR(50), MEM_NUM VARCHAR(50), Foreign Key(MEM_NUM) references MEMBERSHIP(MEM_NUM));
+Query OK, 0 rows affected (0.031 sec)
+
+MariaDB [movieco]> describe RENTAL;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| RENT_NUM  | varchar(50) | NO   | PRI | NULL    |       |
+| RENT_DATE | varchar(50) | YES  |     | NULL    |       |
+| MEM_NUM   | varchar(50) | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.049 sec)
+
+MariaDB [movieco]> create table PRICE(PRICE_CODE VARCHAR(50) Primary Key, PRICE_DESCRIPTION VARCHAR(50), PRICE_RENTFEE double, PRICE_DAILYATEFEE double);
+Query OK, 0 rows affected (0.007 sec)
+
+MariaDB [movieco]> describe PRICE;
++-------------------+-------------+------+-----+---------+-------+
+| Field             | Type        | Null | Key | Default | Extra |
++-------------------+-------------+------+-----+---------+-------+
+| PRICE_CODE        | varchar(50) | NO   | PRI | NULL    |       |
+| PRICE_DESCRIPTION | varchar(50) | YES  |     | NULL    |       |
+| PRICE_RENTFEE     | double      | YES  |     | NULL    |       |
+| PRICE_DAILYATEFEE | double      | YES  |     | NULL    |       |
++-------------------+-------------+------+-----+---------+-------+
+4 rows in set (0.047 sec)
+
+MariaDB [movieco]> create table MOVIE(MOVIE_NUM VARCHAR(50) Primary Key, MOVIE_TITLE VARCHAR(50), MOVIE_YEAR VARCHAR(50), MOVIE_COST double, MOVIE_GENRE VARCHAR(50), PRICE_CODE VARCHAR(50), Foreign Key(PRICE_CODE) references PRICE(PRICE_CODE));
+Query OK, 0 rows affected (0.009 sec)
+
+MariaDB [movieco]> describe MOVIE;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| MOVIE_NUM   | varchar(50) | NO   | PRI | NULL    |       |
+| MOVIE_TITLE | varchar(50) | YES  |     | NULL    |       |
+| MOVIE_YEAR  | varchar(50) | YES  |     | NULL    |       |
+| MOVIE_COST  | double      | YES  |     | NULL    |       |
+| MOVIE_GENRE | varchar(50) | YES  |     | NULL    |       |
+| PRICE_CODE  | varchar(50) | YES  | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+6 rows in set (0.046 sec)
+
+MariaDB [movieco]> create table VIDEO(VID_NUM VARCHAR(50) Primary Key, VID_INDATE VARCHAR(50), MOVIE_NUM VARCHAR(50), Foreign Key(MOVIE_NUM) references MOVIE(MOVIE_NUM));
+Query OK, 0 rows affected (0.026 sec)
+
+MariaDB [movieco]> describe VIDEO;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| VID_NUM    | varchar(50) | NO   | PRI | NULL    |       |
+| VID_INDATE | varchar(50) | YES  |     | NULL    |       |
+| MOVIE_NUM  | varchar(50) | YES  | MUL | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.042 sec)
+
+MariaDB [movieco]> create table DETAILRENTAL(RENT_NUM VARCHAR(50), VID_NUM VARCHAR(50), DETAIL_FEE double, DETAIL_DUEDATE VARCHAR(50), DETAIL_RETURNDATE VARCHAR(50), DETAIL_DAILYLATEFEE double, Primary Key(RENT_NUM, VID_NUM), Foreign Key(RENT_NUM) references RENTAL(RENT_NUM), Foreign Key(VID_NUM) references VIDEO(VID_NUM));
+Query OK, 0 rows affected (0.024 sec)
+
+MariaDB [movieco]> describe DETAILRENTAL;
++---------------------+-------------+------+-----+---------+-------+
+| Field               | Type        | Null | Key | Default | Extra |
++---------------------+-------------+------+-----+---------+-------+
+| RENT_NUM            | varchar(50) | NO   | PRI | NULL    |       |
+| VID_NUM             | varchar(50) | NO   | PRI | NULL    |       |
+| DETAIL_FEE          | double      | YES  |     | NULL    |       |
+| DETAIL_DUEDATE      | varchar(50) | YES  |     | NULL    |       |
+| DETAIL_RETURNDATE   | varchar(50) | YES  |     | NULL    |       |
+| DETAIL_DAILYLATEFEE | double      | YES  |     | NULL    |       |
++---------------------+-------------+------+-----+---------+-------+
+6 rows in set (0.044 sec)
+
+Question 2
+MariaDB [movieco]> insert into MEMBERSHIP(MEM_NUM, MEM_FNAME, MEM_LNAME, MEM_STREET, MEM_CITY, MEM_STATE, MEM_ZIP, MEM_BALANCE) values
+    -> ("103","Curt","Knight","4025 Cornell Court","Flatgap","KY","41219",6),
+    -> ("104","Jamal","Melendez","788 East 145th Avenue","Quebeck","TN","38579",0),
+    -> ("105","Iva","Mcclain","6045 Musket Ball Circle","Summit", "KY","42783",15),
+    -> ("106","Miranda","Parks","4469 Maxwell Place","Germantown","TN","38183",0),
+    -> ("107","Rosario","Elliott","7578 Danner Avenue","Columbia","TN","38402",5),
+    -> ("108","Mattie","Guy","4390 Evergreen Street","Lily","KY","40740",0),
+    -> ("109","Clint","Ochoa","1711 Elnm Street","Greenville","TN","37745",10),
+    -> ("110","Lewis","Rosales","4524 Southwind Circle","Counce","TN","38326",0),
+    -> ("111","Stacy","Mann","2789 East Cook Avenue","Murfeesboro","TN","37132",8),
+    -> ("112","Luis","Trujillo","7267 Melvin Avenue","Heiskell","TN","37754",3),
+    -> ("113","Minnie","Gonzales","6430 Vasili Drive","Williston","TN","38076",0);
+Query OK, 11 rows affected (0.002 sec)
+Records: 11  Duplicates: 0  Warnings: 0
+
+MariaDB [movieco]> select * from MEMBERSHIP;
++---------+-----------+-----------+-------------------------+-------------+-----------+---------+-------------+
+| MEM_NUM | MEM_FNAME | MEM_LNAME | MEM_STREET              | MEM_CITY    | MEM_STATE | MEM_ZIP | MEM_BALANCE |
++---------+-----------+-----------+-------------------------+-------------+-----------+---------+-------------+
+| 102     | Tami      | Dawson    | 2632 Takli Circle       | Norene      | TN        | 37136   |          11 |
+| 103     | Curt      | Knight    | 4025 Cornell Court      | Flatgap     | KY        | 41219   |           6 |
+| 104     | Jamal     | Melendez  | 788 East 145th Avenue   | Quebeck     | TN        | 38579   |           0 |
+| 105     | Iva       | Mcclain   | 6045 Musket Ball Circle | Summit      | KY        | 42783   |          15 |
+| 106     | Miranda   | Parks     | 4469 Maxwell Place      | Germantown  | TN        | 38183   |           0 |
+| 107     | Rosario   | Elliott   | 7578 Danner Avenue      | Columbia    | TN        | 38402   |           5 |
+| 108     | Mattie    | Guy       | 4390 Evergreen Street   | Lily        | KY        | 40740   |           0 |
+| 109     | Clint     | Ochoa     | 1711 Elnm Street        | Greenville  | TN        | 37745   |          10 |
+| 110     | Lewis     | Rosales   | 4524 Southwind Circle   | Counce      | TN        | 38326   |           0 |
+| 111     | Stacy     | Mann      | 2789 East Cook Avenue   | Murfeesboro | TN        | 37132   |           8 |
+| 112     | Luis      | Trujillo  | 7267 Melvin Avenue      | Heiskell    | TN        | 37754   |           3 |
+| 113     | Minnie    | Gonzales  | 6430 Vasili Drive       | Williston   | TN        | 38076   |           0 |
++---------+-----------+-----------+-------------------------+-------------+-----------+---------+-------------+
+12 rows in set (0.001 sec)
+
+MariaDB [movieco]> insert into RENTAL(RENT_NUM, RENT_DATE, MEM_NUM) values
+    -> ("1001","01-MAR-16","103"),
+    -> ("1002","01-MAR-16","105"),
+    -> ("1003","02-MAR-16","102"),
+    -> ("1004","02-MAR-16","110"),
+    -> ("1005","02-MAR-16","111"),
+    -> ("1006","02-MAR-16","107"),
+    -> ("1007","02-MAR-16","104"),
+    -> ("1008","03-MAR-16","105"),
+    -> ("1009","13-MAR-16","111");
+Query OK, 9 rows affected (0.014 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+MariaDB [movieco]> select * from RENTAL;
++----------+-----------+---------+
+| RENT_NUM | RENT_DATE | MEM_NUM |
++----------+-----------+---------+
+| 1001     | 01-MAR-16 | 103     |
+| 1002     | 01-MAR-16 | 105     |
+| 1003     | 02-MAR-16 | 102     |
+| 1004     | 02-MAR-16 | 110     |
+| 1005     | 02-MAR-16 | 111     |
+| 1006     | 02-MAR-16 | 107     |
+| 1007     | 02-MAR-16 | 104     |
+| 1008     | 03-MAR-16 | 105     |
+| 1009     | 13-MAR-16 | 111     |
++----------+-----------+---------+
+9 rows in set (0.000 sec)
+
+MariaDB [movieco]> insert into PRICE(PRICE_CODE, PRICE_DESCRIPTION, PRICE_RENTFEE, PRICE_DAILYATEFEE) values
+    -> ("1","Standard",2,1),
+    -> ("2","New Release",3.5,3),
+    -> ("3","Discount",1.5,1),
+    -> ("4","Weekly Special",1,0.5);
+Query OK, 4 rows affected (0.002 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [movieco]> select * from PRICE;
++------------+-------------------+---------------+-------------------+
+| PRICE_CODE | PRICE_DESCRIPTION | PRICE_RENTFEE | PRICE_DAILYATEFEE |
++------------+-------------------+---------------+-------------------+
+| 1          | Standard          |             2 |                 1 |
+| 2          | New Release       |           3.5 |                 3 |
+| 3          | Discount          |           1.5 |                 1 |
+| 4          | Weekly Special    |             1 |               0.5 |
++------------+-------------------+---------------+-------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [movieco]> insert into MOVIE(MOVIE_NUM, MOVIE_TITLE, MOVIE_YEAR, MOVIE_COST, MOVIE_GENRE, PRICE_CODE) values
+    -> ("1234","The Cesar Family Christmas",2014,39.95,"FAMILY","2"),
+    -> ("1235","Smokey Mountain Wildlife",2011,59.95,"ACTION","1"),
+    -> ("1236","Richard Goodhope",2015,59.95,"DRAMA","2"),
+    -> ("1237","Beatnik Fever",2014,29.95,"COMEDY","2"),
+    -> ("1238","Constant Compassion",2015,89.95,"DRAMA",null),
+    -> ("1239","Where Hope Dies",2005,25.49,"DRAMA","3"),
+    -> ("1245","Time to Burn",2012,45.49,"ACTION","1"),
+    -> ("1246","What He Doesn't Know",2013,58.29,"COMEDY","1");
+Query OK, 8 rows affected (0.014 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+MariaDB [movieco]> select * from MOVIE;
++-----------+----------------------------+------------+------------+-------------+------------+
+| MOVIE_NUM | MOVIE_TITLE                | MOVIE_YEAR | MOVIE_COST | MOVIE_GENRE | PRICE_CODE |
++-----------+----------------------------+------------+------------+-------------+------------+
+| 1234      | The Cesar Family Christmas | 2014       |      39.95 | FAMILY      | 2          |
+| 1235      | Smokey Mountain Wildlife   | 2011       |      59.95 | ACTION      | 1          |
+| 1236      | Richard Goodhope           | 2015       |      59.95 | DRAMA       | 2          |
+| 1237      | Beatnik Fever              | 2014       |      29.95 | COMEDY      | 2          |
+| 1238      | Constant Compassion        | 2015       |      89.95 | DRAMA       | NULL       |
+| 1239      | Where Hope Dies            | 2005       |      25.49 | DRAMA       | 3          |
+| 1245      | Time to Burn               | 2012       |      45.49 | ACTION      | 1          |
+| 1246      | What He Doesn't Know       | 2013       |      58.29 | COMEDY      | 1          |
++-----------+----------------------------+------------+------------+-------------+------------+
+8 rows in set (0.001 sec)
+
+MariaDB [movieco]> insert into VIDEO(VID_NUM, VID_INDATE, MOVIE_NUM) values
+    -> ("54321", "18-JUN-15", "1234"),
+    -> ("54324", "18-JUN-15", "1234"),
+    -> ("54325", "18-JUN-15", "1234"),
+    -> ("34341", "22-JAN-14", "1235"),
+    -> ("34342", "22-JAN-14", "1235"),
+    -> ("34366", "02-MAR-16", "1236"),
+    -> ("34367", "02-MAR-16", "1236"),
+    -> ("34368", "02-MAR-16", "1236"),
+    -> ("34369", "02-MAR-16", "1236"),
+    -> ("44392", "21-OCT-15", "1237"),
+    -> ("44397", "21-OCT-15", "1237"),
+    -> ("59237", "14-FEB-16", "1237"),
+    -> ("61388", "25-JAN-14", "1239"),
+    -> ("61353", "28-JAN-13", "1245"),
+    -> ("61354", "28-JAN-13", "1245"),
+    -> ("61367", "30-JUL-15", "1246"),
+    -> ("61369", "30-JUL-15", "1246");
+Query OK, 17 rows affected (0.016 sec)
+Records: 17  Duplicates: 0  Warnings: 0
+
+MariaDB [movieco]> select * from VIDEO;
++---------+------------+-----------+
+| VID_NUM | VID_INDATE | MOVIE_NUM |
++---------+------------+-----------+
+| 34341   | 22-JAN-14  | 1235      |
+| 34342   | 22-JAN-14  | 1235      |
+| 34366   | 02-MAR-16  | 1236      |
+| 34367   | 02-MAR-16  | 1236      |
+| 34368   | 02-MAR-16  | 1236      |
+| 34369   | 02-MAR-16  | 1236      |
+| 44392   | 21-OCT-15  | 1237      |
+| 44397   | 21-OCT-15  | 1237      |
+| 54321   | 18-JUN-15  | 1234      |
+| 54324   | 18-JUN-15  | 1234      |
+| 54325   | 18-JUN-15  | 1234      |
+| 59237   | 14-FEB-16  | 1237      |
+| 61353   | 28-JAN-13  | 1245      |
+| 61354   | 28-JAN-13  | 1245      |
+| 61367   | 30-JUL-15  | 1246      |
+| 61369   | 30-JUL-15  | 1246      |
+| 61388   | 25-JAN-14  | 1239      |
++---------+------------+-----------+
+17 rows in set (0.001 sec)
+
+MariaDB [movieco]> insert into DETAILRENTAL(RENT_NUM, VID_NUM, DETAIL_FEE, DETAIL_DUEDATE, DETAIL_RETURNDATE, DETAIL_DAILYLATEFEE) values
+    -> ('1001','34342',2,'04-MAR-16','02-MAR-16',null),
+    -> ('1001','61353', 2, '04-MAR-16','03-MAR-16',1),
+    -> ('1002','59237',3.5,'04-MAR-16','04-MAR-16',3),
+    -> ('1003','54325',3.5,'04-MAR-16','09-MAR-16',3),
+    -> ('1003','61369',2,'06-MAR-16','09-MAR-16',1),
+    -> ('1003','61388',0,'06-MAR-16','09-MAR-16',1),
+    -> ('1004','44392', 3.5, '05-MAR-16', '07-MAR-16',3),
+    -> ('1004','34367',3.5,'05-MAR-16','07-MAR-16', 3),
+    -> ('1004','34341',2,'07-MAR-16','07-MAR-16',1),
+    -> ('1005','34342',2,'07-MAR-16','05-MAR-16',1),
+    -> ('1005','44397',3.5,'05-MAR-16','05-MAR-16',3),
+    -> ('1006','34366',3.5,'05-MAR-16','04-MAR-16',3),
+    -> ('1006','61367',2,'07-MAR-16',null,1),
+    -> ('1007','34368',3.5,'05-MAR-16',null,3),
+    -> ('1008','34369', 3.5, '05-MAR-16','05-MAR-16',3),
+    -> ("1009","54324",3.5,"05-MAR-16",null,3),
+    -> ("1001","34366",3.5,"04-MAR-16","02-MAR-16",3);
+Query OK, 17 rows affected (0.019 sec)
+Records: 17  Duplicates: 0  Warnings: 0
+
+MariaDB [movieco]> select * from DETAILRENTAL;
++----------+---------+------------+----------------+-------------------+---------------------+
+| RENT_NUM | VID_NUM | DETAIL_FEE | DETAIL_DUEDATE | DETAIL_RETURNDATE | DETAIL_DAILYLATEFEE |
++----------+---------+------------+----------------+-------------------+---------------------+
+| 1001     | 34342   |          2 | 04-MAR-16      | 02-MAR-16         |                NULL |
+| 1001     | 34366   |        3.5 | 04-MAR-16      | 02-MAR-16         |                   3 |
+| 1001     | 61353   |          2 | 04-MAR-16      | 03-MAR-16         |                   1 |
+| 1002     | 59237   |        3.5 | 04-MAR-16      | 04-MAR-16         |                   3 |
+| 1003     | 54325   |        3.5 | 04-MAR-16      | 09-MAR-16         |                   3 |
+| 1003     | 61369   |          2 | 06-MAR-16      | 09-MAR-16         |                   1 |
+| 1003     | 61388   |          0 | 06-MAR-16      | 09-MAR-16         |                   1 |
+| 1004     | 34341   |          2 | 07-MAR-16      | 07-MAR-16         |                   1 |
+| 1004     | 34367   |        3.5 | 05-MAR-16      | 07-MAR-16         |                   3 |
+| 1004     | 44392   |        3.5 | 05-MAR-16      | 07-MAR-16         |                   3 |
+| 1005     | 34342   |          2 | 07-MAR-16      | 05-MAR-16         |                   1 |
+| 1005     | 44397   |        3.5 | 05-MAR-16      | 05-MAR-16         |                   3 |
+| 1006     | 34366   |        3.5 | 05-MAR-16      | 04-MAR-16         |                   3 |
+| 1006     | 61367   |          2 | 07-MAR-16      | NULL              |                   1 |
+| 1007     | 34368   |        3.5 | 05-MAR-16      | NULL              |                   3 |
+| 1008     | 34369   |        3.5 | 05-MAR-16      | 05-MAR-16         |                   3 |
+| 1009     | 54324   |        3.5 | 05-MAR-16      | NULL              |                   3 |
++----------+---------+------------+----------------+-------------------+---------------------+
+17 rows in set (0.001 sec)
+
+Question 3
+MariaDB [movieco]> update MOVIE set MOVIE_YEAR = 2010 where MOVIE_NUM = "1245";
+Query OK, 1 row affected (0.019 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [movieco]> select * from MOVIE;
++-----------+----------------------------+------------+------------+-------------+------------+
+| MOVIE_NUM | MOVIE_TITLE                | MOVIE_YEAR | MOVIE_COST | MOVIE_GENRE | PRICE_CODE |
++-----------+----------------------------+------------+------------+-------------+------------+
+| 1234      | The Cesar Family Christmas | 2014       |      39.95 | FAMILY      | 2          |
+| 1235      | Smokey Mountain Wildlife   | 2011       |      59.95 | ACTION      | 1          |
+| 1236      | Richard Goodhope           | 2015       |      59.95 | DRAMA       | 2          |
+| 1237      | Beatnik Fever              | 2014       |      29.95 | COMEDY      | 2          |
+| 1238      | Constant Compassion        | 2015       |      89.95 | DRAMA       | NULL       |
+| 1239      | Where Hope Dies            | 2005       |      25.49 | DRAMA       | 3          |
+| 1245      | Time to Burn               | 2010       |      45.49 | ACTION      | 1          |
+| 1246      | What He Doesn't Know       | 2013       |      58.29 | COMEDY      | 1          |
++-----------+----------------------------+------------+------------+-------------+------------+
+8 rows in set (0.001 sec)
+
+Question 4
+MariaDB [movieco]> update MOVIE set PRICE_CODE = "3" where MOVIE_GENRE = "Action";
+Query OK, 2 rows affected (0.015 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+MariaDB [movieco]> select * from MOVIE;
++-----------+----------------------------+------------+------------+-------------+------------+
+| MOVIE_NUM | MOVIE_TITLE                | MOVIE_YEAR | MOVIE_COST | MOVIE_GENRE | PRICE_CODE |
++-----------+----------------------------+------------+------------+-------------+------------+
+| 1234      | The Cesar Family Christmas | 2014       |      39.95 | FAMILY      | 2          |
+| 1235      | Smokey Mountain Wildlife   | 2011       |      59.95 | ACTION      | 3          |
+| 1236      | Richard Goodhope           | 2015       |      59.95 | DRAMA       | 2          |
+| 1237      | Beatnik Fever              | 2014       |      29.95 | COMEDY      | 2          |
+| 1238      | Constant Compassion        | 2015       |      89.95 | DRAMA       | NULL       |
+| 1239      | Where Hope Dies            | 2005       |      25.49 | DRAMA       | 3          |
+| 1245      | Time to Burn               | 2010       |      45.49 | ACTION      | 3          |
+| 1246      | What He Doesn't Know       | 2013       |      58.29 | COMEDY      | 1          |
++-----------+----------------------------+------------+------------+-------------+------------+
+8 rows in set (0.001 sec)
+
+Question 5
+MariaDB [movieco]> update PRICE set PRICE_RENTFEE = PRICE_RENTFEE + 0.50;
+Query OK, 4 rows affected (0.008 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+MariaDB [movieco]> select * from PRICE;
++------------+-------------------+---------------+-------------------+
+| PRICE_CODE | PRICE_DESCRIPTION | PRICE_RENTFEE | PRICE_DAILYATEFEE |
++------------+-------------------+---------------+-------------------+
+| 1          | Standard          |           2.5 |                 1 |
+| 2          | New Release       |             4 |                 3 |
+| 3          | Discount          |             2 |                 1 |
+| 4          | Weekly Special    |           1.5 |               0.5 |
++------------+-------------------+---------------+-------------------+
+4 rows in set (0.001 sec)
+
+Question 6
+MariaDB [movieco]> select MOVIE_TITLE, MOVIE_YEAR, MOVIE_GENRE from MOVIE;
++----------------------------+------------+-------------+
+| MOVIE_TITLE                | MOVIE_YEAR | MOVIE_GENRE |
++----------------------------+------------+-------------+
+| The Cesar Family Christmas | 2014       | FAMILY      |
+| Smokey Mountain Wildlife   | 2011       | ACTION      |
+| Richard Goodhope           | 2015       | DRAMA       |
+| Beatnik Fever              | 2014       | COMEDY      |
+| Constant Compassion        | 2015       | DRAMA       |
+| Where Hope Dies            | 2005       | DRAMA       |
+| Time to Burn               | 2010       | ACTION      |
+| What He Doesn't Know       | 2013       | COMEDY      |
++----------------------------+------------+-------------+
+8 rows in set (0.001 sec)
+
+Question 7
+MariaDB [movieco]> select MOVIE_YEAR, MOVIE_TITLE, MOVIE_COST from MOVIE ORDER BY MOVIE_YEAR DESC;
++------------+----------------------------+------------+
+| MOVIE_YEAR | MOVIE_TITLE                | MOVIE_COST |
++------------+----------------------------+------------+
+| 2015       | Richard Goodhope           |      59.95 |
+| 2015       | Constant Compassion        |      89.95 |
+| 2014       | The Cesar Family Christmas |      39.95 |
+| 2014       | Beatnik Fever              |      29.95 |
+| 2013       | What He Doesn't Know       |      58.29 |
+| 2011       | Smokey Mountain Wildlife   |      59.95 |
+| 2010       | Time to Burn               |      45.49 |
+| 2005       | Where Hope Dies            |      25.49 |
++------------+----------------------------+------------+
+8 rows in set (0.001 sec)
+
+Question 8
+MariaDB [movieco]> select MOVIE_TITLE, MOVIE_YEAR, MOVIE_GENRE from MOVIE ORDER BY MOVIE_GENRE ASC, MOVIE_YEAR DESC;
++----------------------------+------------+-------------+
+| MOVIE_TITLE                | MOVIE_YEAR | MOVIE_GENRE |
++----------------------------+------------+-------------+
+| Smokey Mountain Wildlife   | 2011       | ACTION      |
+| Time to Burn               | 2010       | ACTION      |
+| Beatnik Fever              | 2014       | COMEDY      |
+| What He Doesn't Know       | 2013       | COMEDY      |
+| Richard Goodhope           | 2015       | DRAMA       |
+| Constant Compassion        | 2015       | DRAMA       |
+| Where Hope Dies            | 2005       | DRAMA       |
+| The Cesar Family Christmas | 2014       | FAMILY      |
++----------------------------+------------+-------------+
+8 rows in set (0.001 sec)
+
+Question 9
+MariaDB [movieco]> select MOVIE_NUM, MOVIE_TITLE, PRICE_CODE from MOVIE where MOVIE_TITLE like 'R%';
++-----------+------------------+------------+
+| MOVIE_NUM | MOVIE_TITLE      | PRICE_CODE |
++-----------+------------------+------------+
+| 1236      | Richard Goodhope | 2          |
++-----------+------------------+------------+
+1 row in set (0.013 sec)
+
+Question 10
+MariaDB [movieco]> select MOVIE_TITLE, MOVIE_YEAR, MOVIE_COST from MOVIE where MOVIE_TITLE like '%Hope%' ORDER BY MOVIE_TITLE;
++------------------+------------+------------+
+| MOVIE_TITLE      | MOVIE_YEAR | MOVIE_COST |
++------------------+------------+------------+
+| Richard Goodhope | 2015       |      59.95 |
+| Where Hope Dies  | 2005       |      25.49 |
++------------------+------------+------------+
+2 rows in set (0.001 sec)
+
+Question 11
+
+MariaDB [movieco]> select MOVIE_TITLE, MOVIE_YEAR, MOVIE_GENRE from MOVIE where MOVIE_GENRE = 'ACTION';
++--------------------------+------------+-------------+
+| MOVIE_TITLE              | MOVIE_YEAR | MOVIE_GENRE |
++--------------------------+------------+-------------+
+| Smokey Mountain Wildlife | 2011       | ACTION      |
+| Time to Burn             | 2010       | ACTION      |
++--------------------------+------------+-------------+
+2 rows in set (0.001 sec)
+
+Question 12
+MariaDB [movieco]> select MOVIE_NUM, MOVIE_TITLE, MOVIE_COST from MOVIE where MOVIE_COST > 40;
++-----------+--------------------------+------------+
+| MOVIE_NUM | MOVIE_TITLE              | MOVIE_COST |
++-----------+--------------------------+------------+
+| 1235      | Smokey Mountain Wildlife |      59.95 |
+| 1236      | Richard Goodhope         |      59.95 |
+| 1238      | Constant Compassion      |      89.95 |
+| 1245      | Time to Burn             |      45.49 |
+| 1246      | What He Doesn't Know     |      58.29 |
++-----------+--------------------------+------------+
+5 rows in set (0.013 sec)
+
+Question 13
+MariaDB [movieco]> select MOVIE_NUM, MOVIE_TITLE, MOVIE_COST, MOVIE_GENRE from MOVIE where MOVIE_GENRE IN('ACTION', 'COMEDY') and MOVIE_COST <50 ORDER BY MOVIE_GENRE;
++-----------+---------------+------------+-------------+
+| MOVIE_NUM | MOVIE_TITLE   | MOVIE_COST | MOVIE_GENRE |
++-----------+---------------+------------+-------------+
+| 1245      | Time to Burn  |      45.49 | ACTION      |
+| 1237      | Beatnik Fever |      29.95 | COMEDY      |
++-----------+---------------+------------+-------------+
+2 rows in set (0.002 sec)
+
+Question 14
+MariaDB [movieco]> select MEM_NUM, MEM_FNAME, MEM_LNAME, MEM_STREET, MEM_STATE, MEM_BALANCE from MEMBERSHIP where MEM_STATE = 'TN' and MEM_BALANCE < 5 and MEM_STREET like '%Avenue';
++---------+-----------+-----------+-----------------------+-----------+-------------+
+| MEM_NUM | MEM_FNAME | MEM_LNAME | MEM_STREET            | MEM_STATE | MEM_BALANCE |
++---------+-----------+-----------+-----------------------+-----------+-------------+
+| 104     | Jamal     | Melendez  | 788 East 145th Avenue | TN        |           0 |
+| 112     | Luis      | Trujillo  | 7267 Melvin Avenue    | TN        |           3 |
++---------+-----------+-----------+-----------------------+-----------+-------------+
+2 rows in set (0.017 sec)
+
+Question 15
+MariaDB [movieco]> select MOVIE_GENRE, COUNT(*) as NUM_OF_MOVIES from MOVIE GROUP BY MOVIE_GENRE;
++-------------+---------------+
+| MOVIE_GENRE | NUM_OF_MOVIES |
++-------------+---------------+
+| ACTION      |             2 |
+| COMEDY      |             2 |
+| DRAMA       |             3 |
+| FAMILY      |             1 |
++-------------+---------------+
+4 rows in set (0.015 sec)
+
+Question 16
+MariaDB [movieco]> select AVG(MOVIE_COST) AS AVG_MOVIE_COST from MOVIE;
++--------------------+
+| AVG_MOVIE_COST     |
++--------------------+
+| 51.127500000000005 |
++--------------------+
+1 row in set (0.001 sec)
+
+Question 17
+MariaDB [movieco]> select MOVIE_GENRE, AVG(MOVIE_COST) as AVG_COST from MOVIE GROUP BY MOVIE_GENRE;
++-------------+-------------------+
+| MOVIE_GENRE | AVG_COST          |
++-------------+-------------------+
+| ACTION      |             52.72 |
+| COMEDY      |             44.12 |
+| DRAMA       | 58.46333333333334 |
+| FAMILY      |             39.95 |
++-------------+-------------------+
+4 rows in set (0.001 sec)
+
+Question 18
+MariaDB [movieco]> select M.MOVIE_TITLE, M.MOVIE_GENRE, P.PRICE_DESCRIPTION, P.PRICE_RENTFEE FROM MOVIE M JOIN PRICE P ON M.PRICE_CODE=P.PRICE_CODE;
++----------------------------+-------------+-------------------+---------------+
+| MOVIE_TITLE                | MOVIE_GENRE | PRICE_DESCRIPTION | PRICE_RENTFEE |
++----------------------------+-------------+-------------------+---------------+
+| The Cesar Family Christmas | FAMILY      | New Release       |             4 |
+| Smokey Mountain Wildlife   | ACTION      | Discount          |             2 |
+| Richard Goodhope           | DRAMA       | New Release       |             4 |
+| Beatnik Fever              | COMEDY      | New Release       |             4 |
+| Where Hope Dies            | DRAMA       | Discount          |             2 |
+| Time to Burn               | ACTION      | Discount          |             2 |
+| What He Doesn't Know       | COMEDY      | Standard          |           2.5 |
++----------------------------+-------------+-------------------+---------------+
+7 rows in set (0.001 sec)
+
+Question 19
+MariaDB [movieco]> SELECT M.MOVIE_GENRE, AVG(P.PRICE_RENTFEE) AS AVG_RENTALFEE FROM MOVIE M JOIN PRICE P ON M.PRICE_CODE=P.PRICE_CODE GROUP BY M.MOVIE_GENRE;
++-------------+---------------+
+| MOVIE_GENRE | AVG_RENTALFEE |
++-------------+---------------+
+| ACTION      |             2 |
+| COMEDY      |          3.25 |
+| DRAMA       |             3 |
+| FAMILY      |             4 |
++-------------+---------------+
+4 rows in set (0.001 sec)
+
+Question 20
+MariaDB [movieco]> SELECT M.MOVIE_TITLE, M.MOVIE_COST/P.PRICE_RENTFEE AS BREAKEVEN_RENTALS FROM MOVIE M JOIN PRICE P ON M.PRICE_CODE=P.PRICE_CODE;
++----------------------------+-------------------+
+| MOVIE_TITLE                | BREAKEVEN_RENTALS |
++----------------------------+-------------------+
+| The Cesar Family Christmas |            9.9875 |
+| Smokey Mountain Wildlife   |            29.975 |
+| Richard Goodhope           |           14.9875 |
+| Beatnik Fever              |            7.4875 |
+| Where Hope Dies            |            12.745 |
+| Time to Burn               |            22.745 |
+| What He Doesn't Know       |            23.316 |
++----------------------------+-------------------+
+7 rows in set (0.001 sec)
+
+Question 21
+
+MariaDB [movieco]> SELECT MOVIE_TITLE, MOVIE_YEAR FROM MOVIE WHERE PRICE_CODE IS NOT NULL;
++----------------------------+------------+
+| MOVIE_TITLE                | MOVIE_YEAR |
++----------------------------+------------+
+| What He Doesn't Know       | 2013       |
+| The Cesar Family Christmas | 2014       |
+| Richard Goodhope           | 2015       |
+| Beatnik Fever              | 2014       |
+| Smokey Mountain Wildlife   | 2011       |
+| Where Hope Dies            | 2005       |
+| Time to Burn               | 2010       |
++----------------------------+------------+
+7 rows in set (0.001 sec)
+
+Question 22
+
+MariaDB [movieco]> SELECT MOVIE_TITLE, MOVIE_GENRE, MOVIE_COST FROM MOVIE WHERE MOVIE_COST BETWEEN 44.99 AND 49.99;
++--------------+-------------+------------+
+| MOVIE_TITLE  | MOVIE_GENRE | MOVIE_COST |
++--------------+-------------+------------+
+| Time to Burn | ACTION      |      45.49 |
++--------------+-------------+------------+
+1 row in set (0.013 sec)
+
+Question 23
+MariaDB [movieco]> SELECT M.MOVIE_TITLE, P.PRICE_DESCRIPTION, P.PRICE_RENTFEE, M.MOVIE_GENRE FROM MOVIE M JOIN PRICE P ON M.PRICE_CODE=P.PRICE_CODE WHERE M.MOVIE_GENRE IN ('FAMILY', 'COMEDY', 'DRAMA');
++----------------------------+-------------------+---------------+-------------+
+| MOVIE_TITLE                | PRICE_DESCRIPTION | PRICE_RENTFEE | MOVIE_GENRE |
++----------------------------+-------------------+---------------+-------------+
+| The Cesar Family Christmas | New Release       |             4 | FAMILY      |
+| Richard Goodhope           | New Release       |             4 | DRAMA       |
+| Beatnik Fever              | New Release       |             4 | COMEDY      |
+| Where Hope Dies            | Discount          |             2 | DRAMA       |
+| What He Doesn't Know       | Standard          |           2.5 | COMEDY      |
++----------------------------+-------------------+---------------+-------------+
+5 rows in set (0.001 sec)
+
+Question 24
+MariaDB [movieco]> SELECT DISTINCT M.MEM_NUM, M.MEM_FNAME, M.MEM_LNAME, M.MEM_BALANCE FROM MEMBERSHIP M JOIN RENTAL R ON M.MEM_NUM=R.MEM_NUM;
++---------+-----------+-----------+-------------+
+| MEM_NUM | MEM_FNAME | MEM_LNAME | MEM_BALANCE |
++---------+-----------+-----------+-------------+
+| 102     | Tami      | Dawson    |          11 |
+| 103     | Curt      | Knight    |           6 |
+| 104     | Jamal     | Melendez  |           0 |
+| 105     | Iva       | Mcclain   |          15 |
+| 107     | Rosario   | Elliott   |           5 |
+| 110     | Lewis     | Rosales   |           0 |
+| 111     | Stacy     | Mann      |           8 |
++---------+-----------+-----------+-------------+
+7 rows in set (0.016 sec)
+
+Question 25
+MariaDB [movieco]> SELECT MIN(M.MEM_BALANCE) AS MIN_BALANCE, MAX(M.MEM_BALANCE) AS MAX_BALANCE, AVG(M.MEM_BALANCE) AS AVG_BALANCE FROM MEMBERSHIP M JOIN RENTAL R ON M.MEM_NUM=R.MEM_NUM;
++-------------+-------------+-------------------+
+| MIN_BALANCE | MAX_BALANCE | AVG_BALANCE       |
++-------------+-------------+-------------------+
+|           0 |          15 | 7.555555555555555 |
++-------------+-------------+-------------------+
+1 row in set (0.014 sec)
+
+Question 26
+MariaDB [movieco]> SELECT R.RENT_NUM, R.RENT_DATE, D.VID_NUM, M.MOVIE_TITLE, D.DETAIL_DUEDATE, D.DETAIL_RETURNDATE FROM RENTAL R JOIN DETAILRENTAL D ON R.RENT_NUM=D.RENT_NUM JOIN VIDEO V ON D.VID_NUM=V.VID_NUM JOIN MOVIE M ON V.MOVIE_NUM=M.MOVIE_NUM WHERE D.DETAIL_RETURNDATE > D.DETAIL_DUEDATE ORDER BY R.RENT_NUM, M.MOVIE_TITLE;
++----------+-----------+---------+----------------------------+----------------+-------------------+
+| RENT_NUM | RENT_DATE | VID_NUM | MOVIE_TITLE                | DETAIL_DUEDATE | DETAIL_RETURNDATE |
++----------+-----------+---------+----------------------------+----------------+-------------------+
+| 1003     | 02-MAR-16 | 54325   | The Cesar Family Christmas | 04-MAR-16      | 09-MAR-16         |
+| 1003     | 02-MAR-16 | 61369   | What He Doesn't Know       | 06-MAR-16      | 09-MAR-16         |
+| 1003     | 02-MAR-16 | 61388   | Where Hope Dies            | 06-MAR-16      | 09-MAR-16         |
+| 1004     | 02-MAR-16 | 44392   | Beatnik Fever              | 05-MAR-16      | 07-MAR-16         |
+| 1004     | 02-MAR-16 | 34367   | Richard Goodhope           | 05-MAR-16      | 07-MAR-16         |
++----------+-----------+---------+----------------------------+----------------+-------------------+
+5 rows in set (0.002 sec)
+
+Question 27
+MariaDB [movieco]> SELECT R.RENT_NUM, R.RENT_DATE, M.MOVIE_TITLE, D.DETAIL_FEE FROM RENTAL R JOIN DETAILRENTAL D ON R.RENT_NUM=D.RENT_NUM JOIN VIDEO V ON D.VID_NUM=V.VID_NUM JOIN MOVIE M ON V.MOVIE_NUM=M.MOVIE_NUM WHERE D.DETAIL_RETURNDATE <= D.DETAIL_DUEDATE;
++----------+-----------+--------------------------+------------+
+| RENT_NUM | RENT_DATE | MOVIE_TITLE              | DETAIL_FEE |
++----------+-----------+--------------------------+------------+
+| 1001     | 01-MAR-16 | Smokey Mountain Wildlife |          2 |
+| 1001     | 01-MAR-16 | Richard Goodhope         |        3.5 |
+| 1001     | 01-MAR-16 | Time to Burn             |          2 |
+| 1002     | 01-MAR-16 | Beatnik Fever            |        3.5 |
+| 1004     | 02-MAR-16 | Smokey Mountain Wildlife |          2 |
+| 1005     | 02-MAR-16 | Smokey Mountain Wildlife |          2 |
+| 1005     | 02-MAR-16 | Beatnik Fever            |        3.5 |
+| 1006     | 02-MAR-16 | Richard Goodhope         |        3.5 |
+| 1008     | 03-MAR-16 | Richard Goodhope         |        3.5 |
++----------+-----------+--------------------------+------------+
+9 rows in set (0.001 sec)
+
+Question 28
+MariaDB [movieco]> SELECT M1.MOVIE_NUM, M1.MOVIE_GENRE, AVG(M2.MOVIE_COST) AS AVG_GENRE_COST, M1.MOVIE_COST, ((M1.MOVIE_COST - AVG(M2.MOVIE_COST))/AVG(M2.MOVIE_COST)) * 100 AS PERCENT_DIFFERENCE FROM MOVIE M1 JOIN MOVIE M2 ON M1.MOVIE_GENRE = M2.MOVIE_GENRE GROUP BY M1.MOVIE_NUM, M1.MOVIE_GENRE, M1.MOVIE_COST;
++-----------+-------------+-------------------+------------+--------------------+
+| MOVIE_NUM | MOVIE_GENRE | AVG_GENRE_COST    | MOVIE_COST | PERCENT_DIFFERENCE |
++-----------+-------------+-------------------+------------+--------------------+
+| 1234      | FAMILY      |             39.95 |      39.95 |                  0 |
+| 1235      | ACTION      |             52.72 |      59.95 | 13.713960546282253 |
+| 1236      | DRAMA       | 58.46333333333334 |      59.95 | 2.5429043845145065 |
+| 1237      | COMEDY      |             44.12 |      29.95 |   -32.116953762466 |
+| 1238      | DRAMA       | 58.46333333333334 |      89.95 |  53.85711842180283 |
+| 1239      | DRAMA       | 58.46333333333334 |      25.49 | -56.40002280631736 |
+| 1245      | ACTION      |             52.72 |      45.49 | -13.71396054628224 |
+| 1246      | COMEDY      |             44.12 |      58.29 | 32.116953762466004 |
++-----------+-------------+-------------------+------------+--------------------+
+8 rows in set (0.002 sec)
+
